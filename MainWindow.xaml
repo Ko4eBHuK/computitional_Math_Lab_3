@@ -8,21 +8,22 @@
         Title="CompMath pt.3" Height="600" Width="1300">
     <TabControl>
 
-        <TabItem Header="Решение нелинейных уравнений">
+        <TabItem Header="Решение НУ методом бисекции">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="3*" ></RowDefinition>
                     <RowDefinition Height="2*" ></RowDefinition>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition Width="409*"></ColumnDefinition>
+                    <ColumnDefinition Width="234*"/>
+                    <ColumnDefinition Width="643*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
 
-                <GroupBox Header="Controls" Grid.Row="0" Grid.Column="0">
+                <GroupBox Header="Controls" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition></RowDefinition>
+                            <RowDefinition Height="0*"></RowDefinition>
                             <RowDefinition></RowDefinition>
                             <RowDefinition></RowDefinition>
                             <RowDefinition></RowDefinition>
@@ -34,26 +35,6 @@
                             <ColumnDefinition></ColumnDefinition>
                         </Grid.ColumnDefinitions>
 
-                        <Label Content="метод:" 
-                               Grid.Column="0" 
-                               Grid.Row="0" 
-                               HorizontalContentAlignment="Center" 
-                               VerticalContentAlignment="Center" 
-                               Foreground="Gray" 
-                               FontSize="15"
-                               Margin="40,15,40,15"/>
-
-                        <ComboBox Name="MethodList" 
-                          HorizontalAlignment="Left" 
-                          Foreground="DarkBlue"
-                          Grid.Column="1" Grid.Row="0" Margin="26,18,0,18" Width="164">
-                            <ComboBoxItem IsSelected="True" >
-                                <TextBlock>Метод деления пополам</TextBlock>
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                <TextBlock>Метод касательных</TextBlock>
-                            </ComboBoxItem>
-                        </ComboBox>
 
                         <Label Content="уравнение:" 
                                Grid.Column="0" 
@@ -64,30 +45,37 @@
                                FontSize="15"
                                Margin="40,15,40,15"/>
 
-                        <ComboBox Name="EquationsList" 
+                        <ComboBox Name="EquationList" 
                           HorizontalAlignment="Left" 
                           Foreground="DarkBlue" 
-                          Width="91" 
-                          Grid.Column="1" Grid.Row="1" Margin="61,18,0,18" >
+                          Width="164" 
+                          Grid.Column="1" Grid.Row="1" Margin="26,18,0,33" >
                             <ComboBoxItem IsSelected="True" >
-                                <TextBlock>x^2+14x-4</TextBlock>
+                                <TextBlock>x^5+4=0</TextBlock>
                             </ComboBoxItem>
                             <ComboBoxItem>
-                                <TextBlock>7sin(x-9)</TextBlock>
+                                <TextBlock>3cos(3x)=0</TextBlock>
+                            </ComboBoxItem>
+                            <ComboBoxItem>
+                                <TextBlock>1.5sin(1.5x)-3cos(3x)=0</TextBlock>
                             </ComboBoxItem>
                         </ComboBox>
 
-                        <Label Content="границы отрезка:" 
-                               Grid.Column="0" 
-                               Grid.Row="2" 
-                               Grid.RowSpan="2"
-                               HorizontalContentAlignment="Center" 
-                               VerticalContentAlignment="Center" 
-                               Foreground="Gray" 
-                               FontSize="15"
-                               Margin="40,30,40,30"/>
+                        <TextBlock Grid.Column="0" Panel.ZIndex="1"
+                                   Background="White"
+                                   Name="SectionLabel" 
+                                   Grid.Row="2" 
+                                   Grid.RowSpan="2" 
+                                   TextAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Foreground="Gray" 
+                                   FontSize="15" Margin="10,50">
+                            границы отрезка:
+                        </TextBlock>
 
-                        <TextBox Name="UpperLimit"
+
+                        <TextBox Visibility="Visible"
+                                 Name="UpperLimit"
                          Grid.Column="1" 
                          Grid.Row="2"
                          BorderBrush="Black" 
@@ -95,11 +83,12 @@
                          MaxLines="1"
                          TextAlignment="Center"
                          LostFocus="LimitsTextBox_LostFocus"
-                         Margin="61,20,61,20">
+                         Margin="61,26,61,26">
                             1
                         </TextBox>
 
-                        <TextBox Name="LowerLimit" 
+                        <TextBox Visibility="Visible"
+                                 Name="LowerLimit" 
                                  Grid.Column="1" 
                                  Grid.Row="3"  
                                  BorderBrush="Black" 
@@ -107,9 +96,10 @@
                                  MaxLines="1"
                                  TextAlignment="Center"
                                  LostFocus="LimitsTextBox_LostFocus"
-                                 Margin="61,20,61,20">
+                                 Margin="61,26,61,26">
                             0
                         </TextBox>
+
 
                         <Label Content="погрешность:" 
                                Grid.Column="0" 
@@ -135,22 +125,30 @@
 
                         <Button Grid.Column="2" 
                                 Grid.Row="2" 
-                                Margin="50,0,10,0" 
+                                Margin="50,0,10,42" 
                                 Background="LightGreen" 
-                                Click="Button_Click">
+                                Click="Solve_Equation">
                             Найти решение
+                        </Button>
+
+                        <Button Grid.Column="2"
+                                Grid.Row="3"
+                                Margin="50,42,10,0"
+                                Background="LightPink"
+                                Click="Backhitch">
+                            Очистить
                         </Button>
 
                     </Grid>
                 </GroupBox>
 
-                <GroupBox Header="Log" Grid.Row="1" Grid.Column="0">
+                <GroupBox Header="Log" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
                     <ScrollViewer Name="ConsoleScrollViewer" 
                           VerticalScrollBarVisibility="Auto">
                         <TextBlock Name="OutputConsole"
                            Background="DarkSlateGray"
-                           FontSize="10"
-                           Foreground="Yellow"
+                           FontSize="12"
+                           Foreground="LightGray"
                            FontWeight="Bold"
                            FontFamily="Consolas"
                            TextWrapping="Wrap" 
@@ -160,7 +158,7 @@
 
                 <GroupBox Header="Grpahics" 
                           Grid.Row="0" 
-                          Grid.Column="1" 
+                          Grid.Column="2" 
                           Grid.RowSpan="2">
                     <Grid Name="GraphicPlace" Height="518" Width="631"/>
                 </GroupBox>
@@ -168,7 +166,154 @@
             </Grid>
         </TabItem>
 
-        <TabItem Header="Решение систем нелинейных уравнений">
+        <TabItem Header="Решение НУ методом Ньютона">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="3*" ></RowDefinition>
+                    <RowDefinition Height="2*" ></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="409*"></ColumnDefinition>
+                    <ColumnDefinition Width="234*"/>
+                    <ColumnDefinition Width="643*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <GroupBox Header="Controls" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0*"></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+
+
+                        <Label Content="уравнение:" 
+                               Grid.Column="0" 
+                               Grid.Row="1" 
+                               HorizontalContentAlignment="Center" 
+                               VerticalContentAlignment="Center" 
+                               Foreground="Gray" 
+                               FontSize="15"
+                               Margin="40,15,40,15"/>
+
+                        <ComboBox Name="EquationList2" 
+                          HorizontalAlignment="Left" 
+                          Foreground="DarkBlue" 
+                          Width="164" 
+                          Grid.Column="1" Grid.Row="1" Margin="24,26,0,25" >
+                            <ComboBoxItem IsSelected="True" >
+                                <TextBlock>x^5+4=0</TextBlock>
+                            </ComboBoxItem>
+                            <ComboBoxItem>
+                                <TextBlock>3cos(3x)=0</TextBlock>
+                            </ComboBoxItem>
+                            <ComboBoxItem>
+                                <TextBlock>1.5sin(1.5x)-3cos(3x)=0</TextBlock>
+                            </ComboBoxItem>
+                        </ComboBox>
+
+                        <TextBlock Grid.Column="0" Panel.ZIndex="1"
+                                   Background="White" 
+                                   Grid.Row="2" 
+                                   Grid.RowSpan="2" 
+                                   TextAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Foreground="Gray" 
+                                   FontSize="15" Margin="10,50">
+                            начальное приближение:
+                        </TextBlock>
+
+
+                        <TextBox Visibility="Visible"
+                                 Name="StartApproximation2"
+                         Grid.Column="1" 
+                         Grid.Row="2"
+                                 Grid.RowSpan="2"
+                         BorderBrush="Black" 
+                         MaxLength="10"
+                         MaxLines="1"
+                         TextAlignment="Center"
+                         LostFocus="LimitsTextBox_LostFocus"
+                         Margin="61,66,61,65">
+                            1
+                        </TextBox>
+
+
+
+
+                        <Label Content="погрешность:" 
+                               Grid.Column="0" 
+                               Grid.Row="4" 
+                               HorizontalContentAlignment="Center" 
+                               VerticalContentAlignment="Center" 
+                               Foreground="Gray" 
+                               FontSize="15"
+                               Margin="40,15,40,15"/>
+
+                        <TextBox Name="Accuracy2" 
+                         Grid.Column="1" 
+                         Grid.Row="4" 
+                         BorderBrush="Black" 
+                         MaxLength="15"
+                         MaxLines="1"
+                         Height="20"
+                         TextAlignment="Center"
+                         LostFocus="Accuracy_LostFocus"
+                         Margin="40,15,40,15">
+                            0.1
+                        </TextBox>
+
+                        <Button Grid.Column="2" 
+                                Grid.Row="2" 
+                                Margin="50,0,10,42" 
+                                Background="LightGreen" 
+                                Click="Solve_Equation">
+                            Найти решение
+                        </Button>
+
+                        <Button Grid.Column="2"
+                                Grid.Row="3"
+                                Margin="50,42,10,0"
+                                Background="LightPink"
+                                Click="Backhitch">
+                            Очистить
+                        </Button>
+
+                    </Grid>
+                </GroupBox>
+
+                <GroupBox Header="Log" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                    <ScrollViewer Name="ConsoleScrollViewer2" 
+                          VerticalScrollBarVisibility="Auto">
+                        <TextBlock Name="OutputConsole2"
+                           Background="DarkSlateGray"
+                           FontSize="12"
+                           Foreground="LightGray"
+                           FontWeight="Bold"
+                           FontFamily="Consolas"
+                           TextWrapping="Wrap" 
+                           Padding="5"/>
+                    </ScrollViewer>
+                </GroupBox>
+
+                <GroupBox Header="Grpahics" 
+                          Grid.Row="0" 
+                          Grid.Column="2" 
+                          Grid.RowSpan="2">
+                    <Grid Name="GraphicPlace2" Height="518" Width="631"/>
+                </GroupBox>
+
+            </Grid>
+        </TabItem>
+
+        <TabItem Header="Решение систем НУ методом простой итерации">
             <GroupBox>
                 <Image Source="C:\Users\Ko4eBHuK\Pictures\Saved Pictures\wifoo Ta-class battleship Amino Amino.jpg"/>
             </GroupBox>
