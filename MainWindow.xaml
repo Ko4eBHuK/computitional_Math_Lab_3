@@ -5,7 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CompMathPart3"
         mc:Ignorable="d"
-        Title="CompMath pt.3" Height="600" Width="1300">
+        Title="CompMath pt.3" 
+        Height="600" 
+        Width="1300" 
+        ResizeMode="NoResize">
     <TabControl>
 
         <TabItem Header="Решение НУ методом бисекции">
@@ -127,7 +130,7 @@
                                 Grid.Row="2" 
                                 Margin="50,0,10,42" 
                                 Background="LightGreen" 
-                                Click="Solve_Equation">
+                                Click="Solve_Equation_Bisection">
                             Найти решение
                         </Button>
 
@@ -135,7 +138,7 @@
                                 Grid.Row="3"
                                 Margin="50,42,10,0"
                                 Background="LightPink"
-                                Click="Backhitch">
+                                Click="Backhitch_Bisection">
                             Очистить
                         </Button>
 
@@ -160,7 +163,7 @@
                           Grid.Row="0" 
                           Grid.Column="2" 
                           Grid.RowSpan="2">
-                    <Grid Name="GraphicPlace" Height="518" Width="631"/>
+                    <Grid Name="GraphicPlaceBisection" Height="518" Width="631"/>
                 </GroupBox>
 
             </Grid>
@@ -173,13 +176,14 @@
                     <RowDefinition Height="2*" ></RowDefinition>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="409*"></ColumnDefinition>
-                    <ColumnDefinition Width="234*"/>
-                    <ColumnDefinition Width="643*"></ColumnDefinition>
+                    <ColumnDefinition Width="12*"></ColumnDefinition>
+                    <ColumnDefinition Width="193*"/>
+                    <ColumnDefinition Width="117*"/>
+                    <ColumnDefinition Width="322*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
 
-                <GroupBox Header="Controls" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
-                    <Grid>
+                <GroupBox Header="Controls" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
+                    <Grid Margin="-2,0,2,0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="0*"></RowDefinition>
                             <RowDefinition></RowDefinition>
@@ -232,16 +236,16 @@
 
 
                         <TextBox Visibility="Visible"
-                                 Name="StartApproximation2"
-                         Grid.Column="1" 
-                         Grid.Row="2"
+                                 Name="StartApproximation" 
+                                 Grid.Column="1" 
+                                 Grid.Row="2"
                                  Grid.RowSpan="2"
-                         BorderBrush="Black" 
-                         MaxLength="10"
-                         MaxLines="1"
-                         TextAlignment="Center"
-                         LostFocus="LimitsTextBox_LostFocus"
-                         Margin="61,66,61,65">
+                                 BorderBrush="Black" 
+                                 MaxLength="10"
+                                 MaxLines="1"
+                                 TextAlignment="Center"
+                                 LostFocus="StartApproximation_LostFocus"
+                                 Margin="61,66,61,65">
                             1
                         </TextBox>
 
@@ -274,7 +278,7 @@
                                 Grid.Row="2" 
                                 Margin="50,0,10,42" 
                                 Background="LightGreen" 
-                                Click="Solve_Equation">
+                                Click="Solve_Equation_Newton">
                             Найти решение
                         </Button>
 
@@ -282,14 +286,14 @@
                                 Grid.Row="3"
                                 Margin="50,42,10,0"
                                 Background="LightPink"
-                                Click="Backhitch">
+                                Click="Backhitch_Newton">
                             Очистить
                         </Button>
 
                     </Grid>
                 </GroupBox>
 
-                <GroupBox Header="Log" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                <GroupBox Header="Log" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">
                     <ScrollViewer Name="ConsoleScrollViewer2" 
                           VerticalScrollBarVisibility="Auto">
                         <TextBlock Name="OutputConsole2"
@@ -305,9 +309,9 @@
 
                 <GroupBox Header="Grpahics" 
                           Grid.Row="0" 
-                          Grid.Column="2" 
+                          Grid.Column="3" 
                           Grid.RowSpan="2">
-                    <Grid Name="GraphicPlace2" Height="518" Width="631"/>
+                    <Grid Name="GraphicPlaceNewton" Height="518" Width="631"/>
                 </GroupBox>
 
             </Grid>
