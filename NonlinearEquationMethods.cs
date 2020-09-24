@@ -14,14 +14,16 @@ namespace CompMathPart3
         public double EquationResult { get; set; }
         public double ResultAccuracy { get; set; }
         public bool SolutionExistence { get; set; }
+        public double StartApproximation { get; set; }
 
-        public NonlinearEquationMethods(int methodIndex, int equationIndex, double upperLimit, double lowerLimit, double accuracy) 
+        public NonlinearEquationMethods(int methodIndex, int equationIndex, double upperLimit, double lowerLimit, double accuracy, double startApproximation) 
         {
             MethodIndex = methodIndex;
             EquationIndex = equationIndex;
             RightSectionValue = upperLimit;
             LteftSectionValue = lowerLimit;
             Accuracy = accuracy;
+            StartApproximation = startApproximation;
 
             if (MethodIndex == 0)
             {

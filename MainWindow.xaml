@@ -49,10 +49,13 @@
                                Margin="40,15,40,15"/>
 
                         <ComboBox Name="EquationList" 
-                          HorizontalAlignment="Left" 
-                          Foreground="DarkBlue" 
-                          Width="164" 
-                          Grid.Column="1" Grid.Row="1" Margin="26,18,0,33" >
+                                  HorizontalAlignment="Left" 
+                                  Foreground="DarkBlue" 
+                                  Width="164" 
+                                  Grid.Column="1" 
+                                  Grid.Row="1" 
+                                  Margin="26,18,0,33" 
+                                  SelectionChanged="EquationList_SelectionChanged">
                             <ComboBoxItem IsSelected="True" >
                                 <TextBlock>x^5+4=0</TextBlock>
                             </ComboBoxItem>
