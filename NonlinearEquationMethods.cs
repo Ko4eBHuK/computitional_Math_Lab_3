@@ -15,6 +15,7 @@ namespace CompMathPart3
         public double ResultAccuracy { get; set; }
         public bool SolutionExistence { get; set; }
         public double StartApproximation { get; set; }
+        public bool FastConvergence { get; set; }
 
         public NonlinearEquationMethods(int methodIndex, int equationIndex, double upperLimit, double lowerLimit, double accuracy, double startApproximation) 
         {
@@ -31,7 +32,7 @@ namespace CompMathPart3
             }
             else if (MethodIndex == 1)
             {
-                EquationResult = 5;
+                NewtonMethod();
             }
         }
 
@@ -152,6 +153,80 @@ namespace CompMathPart3
 
         private void NewtonMethod()
         {
+            double functionValue = 0;
+            double firstDerivativeValue = 0;
+            double secondDerivativeValue = 0;
+            double rootValue = 0;
+            double previousRootValue = 0;
+            CountOfIterations = 0;
+            ResultAccuracy = 5;
+            SolutionExistence = true;
+
+            //анализ начального приближения
+            previousRootValue = StartApproximation;
+            switch (EquationIndex)
+            {
+                case 0:
+                    functionValue = Math.Pow(previousRootValue, 5) + 4;
+                    firstDerivativeValue = 5 * Math.Pow(previousRootValue, 4);
+                    secondDerivativeValue = 20 * Math.Pow(previousRootValue, 3);
+                    break;
+                case 1:
+                    functionValue = 3 * Math.Cos(3 * previousRootValue);
+                    firstDerivativeValue = -9 * Math.Sin(3 * previousRootValue);
+                    secondDerivativeValue = -27 * Math.Cos(3 * previousRootValue);
+                    break;
+                case 2:
+                    functionValue = 3 * Math.Cos(3 * previousRootValue);
+                    firstDerivativeValue = 2.25 * Math.Cos(1.5 * previousRootValue) + 9 * Math.Sin(3 * previousRootValue);
+                    secondDerivativeValue = -3.375 * Math.Sin(1.5 * previousRootValue) + 27 * Math.Cos(3 * previousRootValue);
+                    break;
+            }
+            SolutionExistence = firstDerivativeValue != 0;
+            FastConvergence = functionValue * secondDerivativeValue > 0;
+
+            //сам процесс
+            while (ResultAccuracy > Accuracy & CountOfIterations < 10000000 & SolutionExistence)
+            {
+                switch (EquationIndex)
+                {
+                    case 0:
+                        functionValue = Math.Pow(previousRootValue, 5) + 4;
+                        firstDerivativeValue = 5 * Math.Pow(previousRootValue, 4);
+                        secondDerivativeValue = 20 * Math.Pow(previousRootValue, 3);
+                        break;
+                    case 1:
+                        functionValue = 3 * Math.Cos(3 * previousRootValue);
+                        firstDerivativeValue = -9 * Math.Sin(3 * previousRootValue);
+                        secondDerivativeValue = -27 * Math.Cos(3 * previousRootValue);
+                        break;
+                    case 2:
+                        functionValue = 3 * Math.Cos(3 * previousRootValue);
+                        firstDerivativeValue = 2.25 * Math.Cos(1.5 * previousRootValue) + 9 * Math.Sin(3 * previousRootValue);
+                        secondDerivativeValue = -3.375 * Math.Sin(1.5 * previousRootValue) + 27 * Math.Cos(3 * previousRootValue);
+                        break;
+                }
+
+                SolutionExistence = firstDerivativeValue != 0;
+
+                if (SolutionExistence)
+                {
+                    rootValue = previousRootValue - functionValue / firstDerivativeValue;
+                    ResultAccuracy = Math.Abs(rootValue - previousRootValue);
+                    previousRootValue = rootValue;
+                }
+                
+                CountOfIterations++;
+            }
+
+            if (SolutionExistence & CountOfIterations < 10000000)
+            {
+                EquationResult = rootValue;
+            }
+            else
+            {
+                SolutionExistence = false;
+            }
 
         }
         

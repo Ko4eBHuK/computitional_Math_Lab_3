@@ -28,6 +28,7 @@ namespace CompMathPart3
             Show_Graphic_Bisection(-8, 8);
 
             Update_Graphics_Newton();
+            Show_Graphic_Newton(-8, 8);
         }
 
         private void Solve_Equation_Bisection(object sender, RoutedEventArgs e)
@@ -316,103 +317,199 @@ namespace CompMathPart3
             double startApproximation = Double.Parse(StartApproximation.Text.Replace(".", ","));
             double accuracy = Math.Abs(Double.Parse(Accuracy.Text.Replace(".", ",")));
 
+            var solution = new NonlinearEquationMethods(methodIndex, equationIndex, 0, 0, accuracy, startApproximation);
 
+            if (solution.SolutionExistence)
+            {
+                OutputConsole2.Text += "Значение корня: " + solution.EquationResult + "\n" +
+                    "Достигнутая погрешность: " + solution.ResultAccuracy + "\n" +
+                    "Количество итераций: " + solution.CountOfIterations + "\n" +
+                    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+            }
+            else
+            {
+                OutputConsole2.Text += "При данном приближении нет гарнатии существования корня, задайте другой.\n" +
+                    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+            }
+
+            Update_Graphics_Newton();
+
+            Show_Graphic_Newton(-8, 8);
+
+            //добавляем корень на график
+            double x;
+            double y = 0;
+
+            if (solution.SolutionExistence)
+            {
+                x = solution.EquationResult;
+                switch (equationIndex)
+                {
+                    case 0:
+                        y = Math.Pow(x, 5) + 4;
+                        break;
+                    case 1:
+                        y = 3 * Math.Cos(3 * x);
+                        break;
+                    case 2:
+                        y = 1.5 * Math.Sin(1.5 * x) - 3 * Math.Cos(3 * x);
+                        break;
+                }
+                Ellipse result = new Ellipse { Width = 6, Height = 6 };
+                result.Fill = Brushes.Lime;
+                result.Margin = new Thickness(x * 80, -y * 80, 0, 0);
+                GraphicPlaceNewton.Children.Add(result);
+            }
         }
 
         private void Update_Graphics_Newton()
         {
-            GraphicPlaceNewton.Children.Clear();
-
-            //фон
-            Rectangle background = new Rectangle();
-            background.Fill = Brushes.DarkSlateGray;
-            background.VerticalAlignment = VerticalAlignment.Top;
-            background.Width = GraphicPlaceNewton.Width - 7;
-            background.Height = GraphicPlaceNewton.Height - 10;
-            background.RadiusX = 5;
-            background.RadiusY = 5;
-            GraphicPlaceNewton.Children.Add(background);
-            //ось абсцисс
-            Line axisX = new Line();
-            axisX.Stroke = Brushes.LightGray;
-            axisX.X1 = 0;
-            axisX.Y1 = GraphicPlaceNewton.Height * 0.5;
-            axisX.X2 = GraphicPlaceNewton.Width;
-            axisX.Y2 = GraphicPlaceNewton.Height * 0.5;
-            GraphicPlaceNewton.Children.Add(axisX);
-            Line arrowXU = new Line();
-            arrowXU.Stroke = Brushes.LightGray;
-            arrowXU.X1 = GraphicPlaceNewton.Width - 10;
-            arrowXU.Y1 = GraphicPlaceNewton.Height * 0.5 - 5;
-            arrowXU.X2 = GraphicPlaceNewton.Width - 4;
-            arrowXU.Y2 = GraphicPlaceNewton.Height * 0.5;
-            GraphicPlaceNewton.Children.Add(arrowXU);
-            Line arrowXL = new Line();
-            arrowXL.Stroke = Brushes.LightGray;
-            arrowXL.X1 = GraphicPlaceNewton.Width - 4;
-            arrowXL.Y1 = GraphicPlaceNewton.Height * 0.5;
-            arrowXL.X2 = GraphicPlaceNewton.Width - 10;
-            arrowXL.Y2 = GraphicPlaceNewton.Height * 0.5 + 5;
-            GraphicPlaceNewton.Children.Add(arrowXL);
-
-            //ось ординат
-            Line axisY = new Line();
-            axisY.Stroke = Brushes.LightGray;
-            axisY.X1 = GraphicPlaceNewton.Width / 2;
-            axisY.Y1 = GraphicPlaceNewton.Height;
-            axisY.X2 = GraphicPlaceNewton.Width / 2;
-            axisY.Y2 = 0;
-            GraphicPlaceNewton.Children.Add(axisY);
-            Line arrowYL = new Line();
-            arrowYL.Stroke = Brushes.LightGray;
-            arrowYL.X1 = GraphicPlaceNewton.Width / 2 - 5;
-            arrowYL.Y1 = 6;
-            arrowYL.X2 = GraphicPlaceNewton.Width / 2;
-            arrowYL.Y2 = 0;
-            GraphicPlaceNewton.Children.Add(arrowYL);
-            Line arrowYR = new Line();
-            arrowYR.Stroke = Brushes.LightGray;
-            arrowYR.X1 = GraphicPlaceNewton.Width / 2;
-            arrowYR.Y1 = 0;
-            arrowYR.X2 = GraphicPlaceNewton.Width / 2 + 5;
-            arrowYR.Y2 = 6;
-            GraphicPlaceNewton.Children.Add(arrowYR);
-
-            //штрихи единичных отрезков
-            for (int i = 1; i <= 7; i++)
+            if(GraphicPlaceNewton != null)
             {
-                Line hatchXR = new Line();
-                hatchXR.Stroke = Brushes.LightGray;
-                hatchXR.X1 = i * 40 + GraphicPlaceNewton.Width / 2;
-                hatchXR.Y1 = GraphicPlaceNewton.Height / 2 - 3;
-                hatchXR.X2 = i * 40 + GraphicPlaceNewton.Width / 2;
-                hatchXR.Y2 = GraphicPlaceNewton.Height / 2 + 3;
-                GraphicPlaceNewton.Children.Add(hatchXR);
+                GraphicPlaceNewton.Children.Clear();
 
-                Line hatchXL = new Line();
-                hatchXL.Stroke = Brushes.LightGray;
-                hatchXL.X1 = -1 * i * 40 + GraphicPlaceNewton.Width / 2;
-                hatchXL.Y1 = GraphicPlaceNewton.Height / 2 - 3;
-                hatchXL.X2 = -1 * i * 40 + GraphicPlaceNewton.Width / 2;
-                hatchXL.Y2 = GraphicPlaceNewton.Height / 2 + 3;
-                GraphicPlaceNewton.Children.Add(hatchXL);
+                //фон
+                Rectangle background = new Rectangle();
+                background.Fill = Brushes.DarkSlateGray;
+                background.VerticalAlignment = VerticalAlignment.Top;
+                background.HorizontalAlignment = HorizontalAlignment.Left;
+                background.Width = GraphicPlaceNewton.Width - 7;
+                background.Height = GraphicPlaceNewton.Height - 10;
+                background.RadiusX = 5;
+                background.RadiusY = 5;
+                GraphicPlaceNewton.Children.Add(background);
+                //ось абсцисс
+                Line axisX = new Line();
+                axisX.Stroke = Brushes.LightGray;
+                axisX.X1 = 0;
+                axisX.Y1 = GraphicPlaceNewton.Height * 0.5;
+                axisX.X2 = GraphicPlaceNewton.Width;
+                axisX.Y2 = GraphicPlaceNewton.Height * 0.5;
+                GraphicPlaceNewton.Children.Add(axisX);
+                Line arrowXU = new Line();
+                arrowXU.Stroke = Brushes.LightGray;
+                arrowXU.X1 = GraphicPlaceNewton.Width - 10;
+                arrowXU.Y1 = GraphicPlaceNewton.Height * 0.5 - 5;
+                arrowXU.X2 = GraphicPlaceNewton.Width - 4;
+                arrowXU.Y2 = GraphicPlaceNewton.Height * 0.5;
+                GraphicPlaceNewton.Children.Add(arrowXU);
+                Line arrowXL = new Line();
+                arrowXL.Stroke = Brushes.LightGray;
+                arrowXL.X1 = GraphicPlaceNewton.Width - 4;
+                arrowXL.Y1 = GraphicPlaceNewton.Height * 0.5;
+                arrowXL.X2 = GraphicPlaceNewton.Width - 10;
+                arrowXL.Y2 = GraphicPlaceNewton.Height * 0.5 + 5;
+                GraphicPlaceNewton.Children.Add(arrowXL);
 
-                Line hatchYU = new Line();
-                hatchYU.Stroke = Brushes.LightGray;
-                hatchYU.X1 = GraphicPlaceNewton.Width / 2 - 3;
-                hatchYU.Y1 = -1 * i * 40 + GraphicPlaceNewton.Height / 2;
-                hatchYU.X2 = GraphicPlaceNewton.Width / 2 + 3;
-                hatchYU.Y2 = -1 * i * 40 + GraphicPlaceNewton.Height / 2; ;
-                GraphicPlaceNewton.Children.Add(hatchYU);
+                //ось ординат
+                Line axisY = new Line();
+                axisY.Stroke = Brushes.LightGray;
+                axisY.X1 = GraphicPlaceNewton.Width / 2;
+                axisY.Y1 = GraphicPlaceNewton.Height;
+                axisY.X2 = GraphicPlaceNewton.Width / 2;
+                axisY.Y2 = 0;
+                GraphicPlaceNewton.Children.Add(axisY);
+                Line arrowYL = new Line();
+                arrowYL.Stroke = Brushes.LightGray;
+                arrowYL.X1 = GraphicPlaceNewton.Width / 2 - 5;
+                arrowYL.Y1 = 6;
+                arrowYL.X2 = GraphicPlaceNewton.Width / 2;
+                arrowYL.Y2 = 0;
+                GraphicPlaceNewton.Children.Add(arrowYL);
+                Line arrowYR = new Line();
+                arrowYR.Stroke = Brushes.LightGray;
+                arrowYR.X1 = GraphicPlaceNewton.Width / 2;
+                arrowYR.Y1 = 0;
+                arrowYR.X2 = GraphicPlaceNewton.Width / 2 + 5;
+                arrowYR.Y2 = 6;
+                GraphicPlaceNewton.Children.Add(arrowYR);
 
-                Line hatchYL = new Line();
-                hatchYL.Stroke = Brushes.LightGray;
-                hatchYL.X1 = GraphicPlaceNewton.Width / 2 - 3;
-                hatchYL.Y1 = i * 40 + GraphicPlaceNewton.Height / 2;
-                hatchYL.X2 = GraphicPlaceNewton.Width / 2 + 3;
-                hatchYL.Y2 = i * 40 + GraphicPlaceNewton.Height / 2; ;
-                GraphicPlaceNewton.Children.Add(hatchYL);
+                //штрихи единичных отрезков
+                for (int i = 1; i <= 7; i++)
+                {
+                    Line hatchXR = new Line();
+                    hatchXR.Stroke = Brushes.LightGray;
+                    hatchXR.X1 = i * 40 + GraphicPlaceNewton.Width / 2;
+                    hatchXR.Y1 = GraphicPlaceNewton.Height / 2 - 3;
+                    hatchXR.X2 = i * 40 + GraphicPlaceNewton.Width / 2;
+                    hatchXR.Y2 = GraphicPlaceNewton.Height / 2 + 3;
+                    GraphicPlaceNewton.Children.Add(hatchXR);
+
+                    Line hatchXL = new Line();
+                    hatchXL.Stroke = Brushes.LightGray;
+                    hatchXL.X1 = -1 * i * 40 + GraphicPlaceNewton.Width / 2;
+                    hatchXL.Y1 = GraphicPlaceNewton.Height / 2 - 3;
+                    hatchXL.X2 = -1 * i * 40 + GraphicPlaceNewton.Width / 2;
+                    hatchXL.Y2 = GraphicPlaceNewton.Height / 2 + 3;
+                    GraphicPlaceNewton.Children.Add(hatchXL);
+
+                    Line hatchYU = new Line();
+                    hatchYU.Stroke = Brushes.LightGray;
+                    hatchYU.X1 = GraphicPlaceNewton.Width / 2 - 3;
+                    hatchYU.Y1 = -1 * i * 40 + GraphicPlaceNewton.Height / 2;
+                    hatchYU.X2 = GraphicPlaceNewton.Width / 2 + 3;
+                    hatchYU.Y2 = -1 * i * 40 + GraphicPlaceNewton.Height / 2; ;
+                    GraphicPlaceNewton.Children.Add(hatchYU);
+
+                    Line hatchYL = new Line();
+                    hatchYL.Stroke = Brushes.LightGray;
+                    hatchYL.X1 = GraphicPlaceNewton.Width / 2 - 3;
+                    hatchYL.Y1 = i * 40 + GraphicPlaceNewton.Height / 2;
+                    hatchYL.X2 = GraphicPlaceNewton.Width / 2 + 3;
+                    hatchYL.Y2 = i * 40 + GraphicPlaceNewton.Height / 2; ;
+                    GraphicPlaceNewton.Children.Add(hatchYL);
+                }
             }
+
+        }
+
+        private void Show_Graphic_Newton(double a, double b)
+        {
+            if (GraphicPlaceNewton != null)
+            {
+                int equationIndex = EquationList2.SelectedIndex;
+                double x = a;
+                double y = 0;
+
+                switch (equationIndex)
+                {
+                    case 0:
+                        y = Math.Pow(x, 5) + 4;
+                        break;
+                    case 1:
+                        y = 3 * Math.Cos(3 * x);
+                        break;
+                    case 2:
+                        y = 1.5 * Math.Sin(1.5 * x) - 3 * Math.Cos(3 * x);
+                        break;
+                }
+                while (x <= b)
+                {
+                    Line graph = new Line();
+                    graph.X1 = x * 40 + GraphicPlaceNewton.Width * 0.5;
+                    graph.Y1 = -1 * y * 40 + GraphicPlaceNewton.Height * 0.5;
+
+                    x += 0.01;
+                    switch (equationIndex)
+                    {
+                        case 0:
+                            y = Math.Pow(x, 5) + 4;
+                            break;
+                        case 1:
+                            y = 3 * Math.Cos(3 * x);
+                            break;
+                        case 2:
+                            y = 1.5 * Math.Sin(1.5 * x) - 3 * Math.Cos(3 * x);
+                            break;
+                    }
+                    graph.X2 = x * 40 + GraphicPlaceNewton.Width * 0.5;
+                    graph.Y2 = -1 * y * 40 + GraphicPlaceNewton.Height * 0.5;
+                    graph.Stroke = Brushes.HotPink;
+                    graph.StrokeThickness = 3;
+                    GraphicPlaceNewton.Children.Add(graph);
+                }
+            }
+
         }
 
         private void Backhitch_Newton(object sender, RoutedEventArgs e)
@@ -427,9 +524,14 @@ namespace CompMathPart3
 
         private void StartApproximation_LostFocus(object sender, RoutedEventArgs e)
         {
-            if(Double.Parse(StartApproximation.Text) < -8) StartApproximation.Text = "-8";
-            if (Double.Parse(StartApproximation.Text) > 8) StartApproximation.Text = "8";
+            if(Double.Parse(StartApproximation.Text.Replace(".", ",")) < -8) StartApproximation.Text = "-8";
+            if (Double.Parse(StartApproximation.Text.Replace(".", ",")) > 8) StartApproximation.Text = "8";
         }
 
+        private void EquationList2_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Update_Graphics_Newton();
+            Show_Graphic_Newton(-8, 8);
+        }
     }
 }
