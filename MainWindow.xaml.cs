@@ -277,13 +277,14 @@ namespace CompMathPart3
 
         private void Backhitch_Bisection(object sender, RoutedEventArgs e)
         {
-            Update_Graphics_Bisection();
-
             EquationList.SelectedIndex = 0;
             UpperLimit.Text = "1";
             LowerLimit.Text = "0";
             Accuracy.Text = "0.1";
             OutputConsole.Text = "";
+
+            Update_Graphics_Bisection();
+            Show_Graphic_Bisection(-8, 8);
         }
 
         private void EquationList_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -502,12 +503,13 @@ namespace CompMathPart3
 
         private void Backhitch_Newton(object sender, RoutedEventArgs e)
         {
-            Update_Graphics_Newton();
-
             EquationList2.SelectedIndex = 0;
             StartApproximation.Text = "0";
             Accuracy2.Text = "0.1";
             OutputConsole2.Text = "";
+
+            Update_Graphics_Newton();
+            Show_Graphic_Newton(-8, 8);
         }
 
         private void EquationList2_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -520,24 +522,44 @@ namespace CompMathPart3
         //Для метода простой итерации
         private void Solve_System(object sender, RoutedEventArgs e)
         {
-            int equationIndexX1 = EquationListX1.SelectedIndex;
-            int equationIndexX2 = EquationListX2.SelectedIndex;
-            double startApproximationX1 = Double.Parse(StartApproximationX1.Text.Replace(".", ","));
-            double startApproximationX2 = Double.Parse(StartApproximationX2.Text.Replace(".", ","));
+            double startApproximationX = Double.Parse(StartApproximationX.Text.Replace(".", ","));
+            double startApproximationY = Double.Parse(StartApproximationY.Text.Replace(".", ","));
             double accuracy = Double.Parse(Accuracy3.Text.Replace(".", ","));
 
             Update_Graphics_Simple_Iter();
             Show_Graphics_SimpleIter_X1(-8, 8);
             Show_Graphics_SimpleIter_X2(-8, 8);
 
+            var solution = new Simple_Iteration_Method_For_System_Of_Nonlinear_Equations(startApproximationX, startApproximationY, accuracy);
 
+            if (solution.SolutionExistence)
+            {
+                OutputConsole3.Text += "X = " + solution.SystemResultX + "\n";
+                OutputConsole3.Text += "Y = " + solution.SystemResultY + "\n";
+                OutputConsole3.Text += "погрешность X = " + solution.ResultAccuracyX + "\n";
+                OutputConsole3.Text += "погрешность Y = " + solution.ResultAccuracyY + "\n";
+                OutputConsole3.Text += "Количество итераций " + solution.CountOfIterations + "\n";
+                OutputConsole3.Text += "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+            }
+            else
+            {
+                OutputConsole3.Text += "Не выполняется условие сходимости.\n";
+                OutputConsole3.Text += "Попробуйте поменять начальные приближения.\n";
+                OutputConsole3.Text += "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+            }
 
-            OutputConsole3.Text += "Индекс первого уравнения: " + equationIndexX1 + "\n";
-            OutputConsole3.Text += "Индекс второго уравнения: " + equationIndexX2 + "\n";
-            OutputConsole3.Text += "Приближение первого уравнения: " + startApproximationX1 + "\n";
-            OutputConsole3.Text += "Приближение второго уравнения: " + startApproximationX2 + "\n";
-            OutputConsole3.Text += "Погрешность решения: " + accuracy + "\n";
-            OutputConsole3.Text += "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+            //добавляем корень на график            
+            if (solution.SolutionExistence)
+            {
+                double x = solution.SystemResultX;
+                double y = solution.SystemResultY;
+
+                Ellipse result = new Ellipse { Width = 6, Height = 6 };
+                result.Fill = Brushes.Lime;
+                result.Margin = new Thickness(x * 80, -y * 80, 0, 0);
+                GraphicPlaceSimpleIter.Children.Add(result);
+            }
+
         }
 
         private void Update_Graphics_Simple_Iter()
@@ -644,22 +666,9 @@ namespace CompMathPart3
         {
             if (GraphicPlaceSimpleIter != null)
             {
-                int equationIndex = EquationListX1.SelectedIndex;
                 double x = a;
-                double y = 0;
+                double y = 2 * x * x - 5;
 
-                switch (equationIndex)
-                {
-                    case 0:
-                        y = Math.Pow(x, 5) + 4;
-                        break;
-                    case 1:
-                        y = 3 * Math.Cos(3 * x);
-                        break;
-                    case 2:
-                        y = 1.5 * Math.Sin(1.5 * x);
-                        break;
-                }
                 while (x <= b)
                 {
                     Line graph = new Line();
@@ -667,18 +676,7 @@ namespace CompMathPart3
                     graph.Y1 = -1 * y * 40 + GraphicPlaceSimpleIter.Height * 0.5;
 
                     x += 0.01;
-                    switch (equationIndex)
-                    {
-                        case 0:
-                            y = Math.Pow(x, 5) + 4;
-                            break;
-                        case 1:
-                            y = 3 * Math.Cos(3 * x);
-                            break;
-                        case 2:
-                            y = 1.5 * Math.Sin(1.5 * x) - 3 * Math.Cos(3 * x);
-                            break;
-                    }
+                    y = 2 * x * x - 5;
                     graph.X2 = x * 40 + GraphicPlaceSimpleIter.Width * 0.5;
                     graph.Y2 = -1 * y * 40 + GraphicPlaceSimpleIter.Height * 0.5;
                     graph.Stroke = Brushes.HotPink;
@@ -692,22 +690,9 @@ namespace CompMathPart3
         {
             if (GraphicPlaceSimpleIter != null)
             {
-                int equationIndex = EquationListX2.SelectedIndex;
                 double x = a;
-                double y = 0;
+                double y = 0.1 * Math.Pow(x - 4, 2) - 4; ;
 
-                switch (equationIndex)
-                {
-                    case 0:
-                        y = Math.Pow(x, 5) + 4;
-                        break;
-                    case 1:
-                        y = 3 * Math.Cos(3 * x);
-                        break;
-                    case 2:
-                        y = 1.5 * Math.Sin(1.5 * x);
-                        break;
-                }
                 while (x <= b)
                 {
                     Line graph = new Line();
@@ -715,18 +700,7 @@ namespace CompMathPart3
                     graph.Y1 = -1 * y * 40 + GraphicPlaceSimpleIter.Height * 0.5;
 
                     x += 0.01;
-                    switch (equationIndex)
-                    {
-                        case 0:
-                            y = Math.Pow(x, 5) + 4;
-                            break;
-                        case 1:
-                            y = 3 * Math.Cos(3 * x);
-                            break;
-                        case 2:
-                            y = 1.5 * Math.Sin(1.5 * x) - 3 * Math.Cos(3 * x);
-                            break;
-                    }
+                    y = 0.1 * Math.Pow(x - 4, 2) - 4;
                     graph.X2 = x * 40 + GraphicPlaceSimpleIter.Width * 0.5;
                     graph.Y2 = -1 * y * 40 + GraphicPlaceSimpleIter.Height * 0.5;
                     graph.Stroke = Brushes.OrangeRed;
@@ -738,17 +712,11 @@ namespace CompMathPart3
 
         private void Backhitch_SimpleIter(object sender, RoutedEventArgs e)
         {
-            EquationListX1.SelectedIndex = 0;
-            EquationListX2.SelectedIndex = 0;
-            StartApproximationX1.Text = "1";
-            StartApproximationX2.Text = "1";
+            StartApproximationX.Text = "1";
+            StartApproximationY.Text = "1";
             Accuracy3.Text = "0.1";
+            OutputConsole3.Text = "";
 
-            Update_Graphics_Simple_Iter();
-        }
-
-        private void EquationLists_SimpleIter_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
             Update_Graphics_Simple_Iter();
             Show_Graphics_SimpleIter_X1(-8, 8);
             Show_Graphics_SimpleIter_X2(-8, 8);

@@ -342,11 +342,11 @@
                 <GroupBox Header="Controls" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition></RowDefinition>
-                            <RowDefinition></RowDefinition>
-                            <RowDefinition></RowDefinition>
-                            <RowDefinition></RowDefinition>
-                            <RowDefinition></RowDefinition>
+                            <RowDefinition Height="60*"></RowDefinition>
+                            <RowDefinition Height="60"></RowDefinition>
+                            <RowDefinition Height="61*"></RowDefinition>
+                            <RowDefinition Height="61*"></RowDefinition>
+                            <RowDefinition Height="61*"></RowDefinition>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition></ColumnDefinition>
@@ -363,24 +363,16 @@
                                Grid.Row="0"
                                Grid.Column="0"/>
 
-                        <ComboBox Name="EquationListX1" 
-                                  HorizontalAlignment="Left" 
-                                  Foreground="DarkBlue" 
-                                  Width="160" 
-                                  Grid.Column="1" 
-                                  Grid.Row="0"  
-                                   SelectionChanged="EquationLists_SimpleIter_SelectionChanged" 
-                                  Margin="25,15,0,15">
-                            <ComboBoxItem IsSelected="True" >
-                                <TextBlock>x^5+4-y=0</TextBlock>
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                <TextBlock>3cos(3x)-y=0</TextBlock>
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                <TextBlock>1.5sin(1.5x)-y=0</TextBlock>
-                            </ComboBoxItem>
-                        </ComboBox>
+                        <Label Content="y=2x^2-5"
+                               HorizontalContentAlignment="Center" 
+                               VerticalContentAlignment="Center" 
+                               Foreground="Black" 
+                               FontSize="15" 
+                               Margin="30,15,30,15"
+                               Grid.Row="0"
+                               Grid.Column="1" 
+                                BorderThickness="1"
+                               BorderBrush="LightPink"/>
 
                         <Label Content="Уравнение 2:"
                                HorizontalContentAlignment="Center" 
@@ -391,24 +383,15 @@
                                Grid.Row="1"
                                Grid.Column="0"/>
 
-                        <ComboBox Name="EquationListX2" 
-                                  HorizontalAlignment="Left" 
-                                  Foreground="DarkBlue" 
-                                  Width="160" 
-                                  Grid.Column="1" 
-                                  Grid.Row="1"
-                                  SelectionChanged="EquationLists_SimpleIter_SelectionChanged"
-                                  Margin="25,15,0,15">
-                            <ComboBoxItem IsSelected="True" >
-                                <TextBlock>x^5+4-y=0</TextBlock>
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                <TextBlock>3cos(3x)-y=0</TextBlock>
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                <TextBlock>1.5sin(1.5x)-y=0</TextBlock>
-                            </ComboBoxItem>
-                        </ComboBox>
+                        <Label Content="y=0.1*(x-4)^2-4"
+                               HorizontalContentAlignment="Center" 
+                               VerticalContentAlignment="Center" 
+                               Foreground="Black" 
+                               FontSize="15" 
+                               Margin="30,15,30,15"
+                               Grid.Row="1"
+                               Grid.Column="1" BorderThickness="1"
+                               BorderBrush="OrangeRed"/>
 
                         <Label Content="Приближение x:"
                                HorizontalContentAlignment="Center" 
@@ -419,7 +402,7 @@
                                Grid.Row="2"
                                Grid.Column="0"/>
 
-                        <TextBox Name="StartApproximationX1" 
+                        <TextBox Name="StartApproximationX" 
                                  Grid.Column="1" 
                                  Grid.Row="2"
                                  BorderBrush="Black" 
@@ -441,7 +424,7 @@
                                Grid.Column="0"/>
 
                         <TextBox Visibility="Visible"
-                                 Name="StartApproximationX2" 
+                                 Name="StartApproximationY" 
                                  Grid.Column="1" 
                                  Grid.Row="3"
                                  BorderBrush="Black" 
